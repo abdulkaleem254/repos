@@ -1,28 +1,22 @@
 import { useEffect, useState } from "react";
+// import.meta.env.VITE_GITHUB_TOKEN;
 
 const GetInfo = ({ value }) => {
-    const token = process.env.REACT_APP_GITHUB_TOKEN; // Use environment variable for the token
+    const token = import.meta.env.VITE_GITHUB_TOKEN;  //Use environment variable for the token
     const username = value;
     const url = `https://api.github.com/users/${username}/repos`;
-
-    const [repos, setRepos] = useState([]);
-    const [checkLimitrate, setCheckLimitrate] = useState(null);
-    const [error, setError] = useState(null);
+    const [repos, setRepos] = useState();
+    const [checkLimitrate, setCheckLimitrate] = useState();
+    const [error, setError] = useState();
 
     const repoData = async () => {
         try {
             const res = await fetch(url, {
                 headers: {
-                    'Authorization': `Bearer ${token}`,
+                    'Authorization': `${token}`,
                 }
             });
-
-            if (!res.ok) {
-                throw new Error(`Error fetching repos: ${res.statusText}`);
-            }
-
             const data = await res.json();
-            console.log(data);
             return data;
         } catch (err) {
             console.log("Error", err);
@@ -30,23 +24,20 @@ const GetInfo = ({ value }) => {
         }
     };
 
+
     const checkLimit = async () => {
         const url = `https://api.github.com/rate_limit`;
+        
         try {
-            const res = await fetch(url, {
-                headers: {
-                    'Authorization': `Bearer ${token}`
+            const res = await fetch(url,{
+                headers:{
+                    'Authorization':`${tokken}`
                 }
             });
-
-            if (!res.ok) {
-                throw new Error(`Error fetching rate limit: ${res.statusText}`);
-            }
-
             const data = await res.json();
             return data;
         } catch (err) {
-            console.log("Error ", err);
+            // console.log("Error ", err);
             setError(err.message);
         }
     };
@@ -57,7 +48,7 @@ const GetInfo = ({ value }) => {
             setCheckLimitrate(data);
         });
         repoData().then(data => {
-            console.log(data);
+            // console.log(data);
             setRepos(data);
         });
     }, [username]);
@@ -65,7 +56,6 @@ const GetInfo = ({ value }) => {
     return (
         <>
             <div className="container-box">
-                {error && <div className="error">{error}</div>}
                 <ul>
                     <li><b>REPOS</b></li>
                     {repos && repos.length > 0 && repos.map((repo, index) => {
@@ -74,11 +64,11 @@ const GetInfo = ({ value }) => {
                         return <li key={index}> <a href={url} target="_blank" rel="noopener noreferrer">{repo.name}</a></li>
                     })}
                 </ul>
-                <ul>
-                    <li>Limit : {checkLimitrate && checkLimitrate.rate ? checkLimitrate.rate.limit : 'N/A'}</li>
-                    <li>Remaining : {checkLimitrate && checkLimitrate.rate ? checkLimitrate.rate.remaining : 'N/A'}</li>
-                    <li>Reset : {checkLimitrate && checkLimitrate.rate ? checkLimitrate.rate.reset : 'N/A'}</li>
-                </ul>
+                    <ul>
+                        <li>Limit : {checkLimitrate && checkLimitrate.rate ? checkLimitrate.rate.limit : 'N/A'}</li>
+                        <li>Remaining : {checkLimitrate && checkLimitrate.rate ? checkLimitrate.rate.remaining : 'N/A'}</li>
+                        <li>Reset : {checkLimitrate && checkLimitrate.rate ? checkLimitrate.rate.reset : 'N/A'}</li>
+                    </ul>
             </div>
         </>
     );

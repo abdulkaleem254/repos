@@ -9,6 +9,7 @@ const App=()=>{
     
   }
   console.log(searchValue);
+  // console.log('GitHub Token:', import.meta.env.VITE_GITHUB_TOKEN);
   return(
     <>
       <div className="container">
