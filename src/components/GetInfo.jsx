@@ -31,10 +31,12 @@ const GetInfo = ({ value }) => {
         try {
             const res = await fetch(url,{
                 headers:{
-                    'Authorization':`${tokken}`
+                    'Authorization':`${token}`
                 }
             });
             const data = await res.json();
+            console.log(data);
+            
             return data;
         } catch (err) {
             // console.log("Error ", err);
