@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-const token="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";
+// const token="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";
 const GetInfo = ({ value }) => {
     const username = value;
     const url = `https://api.github.com/users/${username}/repos`;
@@ -8,11 +8,7 @@ const GetInfo = ({ value }) => {
     const [checkLimitrate,setCheckLimitrate]=useState();
     const repoData = async() => {
         try{
-            const res=await fetch(url,{
-                headers:{
-                    'Authorization': `Bearer ${token}`,
-                }
-            });
+            const res=await fetch(url);
             const data = await res.json();     
             console.log(data);
             return data;
@@ -24,11 +20,7 @@ const GetInfo = ({ value }) => {
     const checkLimit=async()=>{
         const url=`https://api.github.com/rate_limit`;
         try{
-            const res=await fetch(url,{
-                headers:{
-                    'Authorization': `Bearer ${token}`
-                }
-            });
+            const res=await fetch(url);
             const data=await res.json();
             return data;
 
@@ -51,7 +43,7 @@ const GetInfo = ({ value }) => {
         <div className="container-box">
         <ul>
             <li><b>REPOS</b></li>
-            {repos.length>0&& repos.map((repo,index)=>{
+            {repos&&repos.length>0&& repos.map((repo,index)=>{
                 const repoUrl = "https://github.com/"; // Base URL for GitHub repositories
                 let url = `${repoUrl}${repo.full_name}`; // Use full_name to get 'username/repo-name'
                 return <li key={index}> <a href={url} target="blank" rel="noopener noreferrer">{repo.name}</a></li>
