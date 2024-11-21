@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-// const token="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";
 const GetInfo = ({ value }) => {
     const username = value;
     const url = `https://api.github.com/users/${username}/repos`;
