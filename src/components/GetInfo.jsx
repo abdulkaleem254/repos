@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+const token = process.env.REACT_APP_GITHUB_TOKEN;
 const GetInfo = ({ value }) => {
     const username = value;
     const url = `https://api.github.com/users/${username}/repos`;
@@ -7,7 +8,11 @@ const GetInfo = ({ value }) => {
     const [checkLimitrate,setCheckLimitrate]=useState();
     const repoData = async() => {
         try{
-            const res=await fetch(url);
+            const res=await fetch(url,{
+                headers:{
+                    'Authorization': `Bearer ${token}`,
+                }
+            });
             const data = await res.json();     
             console.log(data);
             return data;
@@ -19,7 +24,11 @@ const GetInfo = ({ value }) => {
     const checkLimit=async()=>{
         const url=`https://api.github.com/rate_limit`;
         try{
-            const res=await fetch(url);
+            const res=await fetch(url,{
+                headers:{
+                    'Authorization': `Bearer ${token}`
+                }
+            });
             const data=await res.json();
             return data;
 
